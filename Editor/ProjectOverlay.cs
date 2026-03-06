@@ -223,7 +223,11 @@ namespace Bro.ReferenceRadar
             }
             var settings = Settings.Instance;
             var isLeft = settings != null && settings.CounterPosition == CounterPosition.Left;
-            _labelStyle.alignment = isLeft ? TextAnchor.MiddleLeft : TextAnchor.MiddleRight;
+            if (isLeft)
+            {
+                rect = new Rect(rect.x - 30, rect.y, 28, rect.height);
+            }
+            _labelStyle.alignment = isLeft ? TextAnchor.MiddleRight : TextAnchor.MiddleRight;
             GUI.Label(rect, count.ToString(), _labelStyle);
         }
     }

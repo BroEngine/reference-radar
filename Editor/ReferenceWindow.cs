@@ -317,6 +317,7 @@ namespace Bro.ReferenceRadar
             if (_selectedGuids.Length == 0)
             {
                 EditorGUILayout.HelpBox("Select an asset in the Project window or an object in the Scene.", MessageType.Info);
+                DrawFooter();
                 return;
             }
             DrawResults();
