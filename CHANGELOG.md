@@ -1,0 +1,15 @@
+# Changelog
+
+## [1.0.0] - 2026-03-06
+
+### Added
+- Two-way reference tracking (Used By / Uses) for project assets and scene objects
+- Reference count overlay in the Project window (configurable left/right position)
+- Binary cache with incremental updates via AssetPostprocessor
+- YAML scanning (line-by-line guid extraction) and binary scanning (SerializedObject traversal)
+- Folder, TerrainData, and Prefab/GameObject scanning
+- Scene object support (GO-to-GO and GO-to-asset references, PrefabStage aware)
+- Multi-selection support with merged results
+- Virtualized scroll for large result lists
+- Configurable Settings ScriptableObject (scan scope, ignore rules, display, performance)
+- Auto-migration from JSON to binary cache format
