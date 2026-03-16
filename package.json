@@ -1,6 +1,6 @@
 {
   "name": "com.bro.reference-radar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "ReferenceRadar",
   "description": "Lightweight Unity Editor tool for tracking asset references. Shows Used By / Uses for any asset or scene object, displays reference counts in the Project window overlay, and keeps the cache up to date automatically.",
   "unity": "2021.3",

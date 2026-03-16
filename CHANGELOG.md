@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.1] - 2026-03-16
+
+### Fixed
+- Batched project scanning to prevent editor freezing on large projects
+- Error handling during asset scanning with logging
+
+### Changed
+- Scanning logic extracted to dedicated ProjectScanner class
+
 ## [1.0.0] - 2026-03-06
 
 ### Added
