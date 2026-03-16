@@ -269,10 +269,17 @@ namespace Bro.ReferenceRadar
             
             if (!ProjectOverlay.IsReady)
             {
-                EditorGUILayout.HelpBox("Cache is not ready. Run a scan first.", MessageType.Info);
-                if (GUILayout.Button("Scan Project"))
+                if (ProjectOverlay.IsScanning)
                 {
-                    PerformScan(false);
+                    EditorGUILayout.HelpBox("Scanning project...", MessageType.Info);
+                }
+                else
+                {
+                    EditorGUILayout.HelpBox("Cache is not ready. Run a scan first.", MessageType.Info);
+                    if (GUILayout.Button("Scan Project"))
+                    {
+                        PerformScan(false);
+                    }
                 }
                 return;
             }
@@ -488,12 +495,7 @@ namespace Bro.ReferenceRadar
 
         private void PerformScan(bool isForce)
         {
-            ProjectOverlay.StopProcessing();
-            var cache = ProjectOverlay.Cache;
-            cache.ScanProject(isForce);
-            cache.Save();
-            ProjectOverlay.RebuildUsedByMap();
-            RebuildResults();
+            ProjectOverlay.StartFullScan(isForce);
         }
 
         private void EnsureStyles()

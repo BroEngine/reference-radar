@@ -144,83 +144,7 @@ namespace Bro.ReferenceRadar
             }
         }
 
-        public int ScanProject(bool isForce)
-        {
-            var allPaths = AssetDatabase.GetAllAssetPaths();
-
-            var settings = Settings.Instance;
-            var isScanPackages = settings == null || settings.IsScanPackages;
-            var isScanProjectSettings = settings == null || settings.IsScanProjectSettings;
-
-            var validPaths = new List<string>();
-            foreach (var path in allPaths)
-            {
-                var isAssetsPath = path.StartsWith("Assets/", StringComparison.Ordinal);
-                var isPackagesPath = isScanPackages && path.StartsWith("Packages/", StringComparison.Ordinal);
-                var isProjectSettingsPath = isScanProjectSettings && path.StartsWith("ProjectSettings/", StringComparison.Ordinal);
-                if (isAssetsPath || isPackagesPath || isProjectSettingsPath)
-                {
-                    validPaths.Add(path);
-                }
-            }
-
-            var activeGuids = new HashSet<string>();
-            var scannedCount = 0;
-
-            for (var i = 0; i < validPaths.Count; i++)
-            {
-                var path = validPaths[i];
-
-                var progress = (float)(i + 1) / validPaths.Count;
-                var isCancelled = EditorUtility.DisplayCancelableProgressBar(
-                    "ReferenceRadar - Scanning",
-                    $"[{i + 1}/{validPaths.Count}] {path}",
-                    progress);
-
-                if (isCancelled)
-                {
-                    EditorUtility.ClearProgressBar();
-                    Debug.Log($"[ReferenceRadar] scan cancelled at {i + 1}/{validPaths.Count}");
-                    return scannedCount;
-                }
-
-                var guid = AssetDatabase.AssetPathToGUID(path);
-                if (string.IsNullOrEmpty(guid))
-                {
-                    continue;
-                }
-                activeGuids.Add(guid);
-
-                var type = ContentScanner.ClassifyAsset(path);
-                var entry = AddEntry(guid);
-                entry.Type = type;
-
-                var currentTimestamp = GetFileTimestamp(path);
-                var isDirty = entry.FileTimestamp != currentTimestamp || isForce;
-
-                if (isDirty)
-                {
-                    var isReadable = type != AssetType.NonReadable && type != AssetType.Unknown;
-                    if (isReadable)
-                    {
-                        ContentScanner.ScanEntry(entry, path);
-                        scannedCount++;
-                    }
-                    else
-                    {
-                        entry.ClearUseGuids();
-                    }
-
-                    entry.FileTimestamp = currentTimestamp;
-                }
-            }
-
-            RemoveStaleEntries(activeGuids);
-            EditorUtility.ClearProgressBar();
-            return scannedCount;
-        }
-
-        private void RemoveStaleEntries(HashSet<string> activeGuids)
+        internal void RemoveStaleEntries(HashSet<string> activeGuids)
         {
             var staleGuids = new List<string>();
             foreach (var entry in _data.Entries)
@@ -409,9 +333,18 @@ namespace Bro.ReferenceRadar
 
         private static int HexCharToNibble(char c)
         {
-            if (c >= '0' && c <= '9') { return c - '0'; }
-            if (c >= 'a' && c <= 'f') { return c - 'a' + 10; }
-            if (c >= 'A' && c <= 'F') { return c - 'A' + 10; }
+            if (c >= '0' && c <= '9')
+            {
+                return c - '0';
+            }
+            if (c >= 'a' && c <= 'f')
+            {
+                return c - 'a' + 10;
+            }
+            if (c >= 'A' && c <= 'F')
+            {
+                return c - 'A' + 10;
+            }
             return 0;
         }
 

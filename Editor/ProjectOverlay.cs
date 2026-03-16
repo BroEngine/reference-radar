@@ -26,6 +26,8 @@ namespace Bro.ReferenceRadar
         {
             EditorApplication.projectWindowItemOnGUI -= OnProjectWindowItemGUI;
             EditorApplication.projectWindowItemOnGUI += OnProjectWindowItemGUI;
+            ProjectScanner.Completed -= OnScanCompleted;
+            ProjectScanner.Completed += OnScanCompleted;
         }
 
         public static Cache Cache
@@ -38,6 +40,7 @@ namespace Bro.ReferenceRadar
         }
 
         public static bool IsReady => _isReady;
+        public static bool IsScanning => ProjectScanner.IsScanning;
 
         public static void CheckCacheFile()
         {
@@ -79,7 +82,7 @@ namespace Bro.ReferenceRadar
                 return;
             }
 
-            if (!_isReady)
+            if (!_isReady || ProjectScanner.IsScanning)
             {
                 return;
             }
@@ -113,6 +116,25 @@ namespace Bro.ReferenceRadar
             _isProcessing = false;
             _dirtyQueue.Clear();
             _dirtySet.Clear();
+        }
+
+        public static void StartFullScan(bool isForce)
+        {
+            StopProcessing();
+            EnsureInitialized();
+            ProjectScanner.Start(_cache, isForce);
+        }
+
+        private static void OnScanCompleted()
+        {
+            _isReady = true;
+            EditorApplication.RepaintProjectWindow();
+            CacheUpdated?.Invoke();
+
+            if (_dirtyQueue.Count > 0)
+            {
+                StartProcessing();
+            }
         }
 
         private static void EnsureInitialized()
@@ -227,7 +249,7 @@ namespace Bro.ReferenceRadar
             {
                 rect = new Rect(rect.x - 30, rect.y, 28, rect.height);
             }
-            _labelStyle.alignment = isLeft ? TextAnchor.MiddleRight : TextAnchor.MiddleRight;
+            _labelStyle.alignment = TextAnchor.MiddleRight;
             GUI.Label(rect, count.ToString(), _labelStyle);
         }
     }

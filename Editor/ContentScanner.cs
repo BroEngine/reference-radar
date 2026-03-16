@@ -305,7 +305,8 @@ namespace Bro.ReferenceRadar
                 {
                     return false;
                 }
-                return buffer[0] == '%' && buffer[1] == 'Y' && buffer[2] == 'A' && buffer[3] == 'M' && buffer[4] == 'L';
+                var isYamlHeader = buffer[0] == '%' && buffer[1] == 'Y' && buffer[2] == 'A' && buffer[3] == 'M' && buffer[4] == 'L';
+                return isYamlHeader;
             }
             catch
             {
