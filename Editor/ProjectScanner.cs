@@ -8,7 +8,6 @@ namespace Bro.ReferenceRadar
 {
     public static class ProjectScanner
     {
-        private const long BatchTimeMs = 100;
 
         public static event Action Completed;
 
@@ -77,7 +76,7 @@ namespace Bro.ReferenceRadar
 
             var sw = Stopwatch.StartNew();
 
-            while (_index < _paths.Count && sw.ElapsedMilliseconds < BatchTimeMs)
+            while (_index < _paths.Count && sw.ElapsedMilliseconds < Settings.BatchTimeMs)
             {
                 var path = _paths[_index];
                 _index++;

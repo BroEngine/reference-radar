@@ -9,7 +9,6 @@ namespace Bro.ReferenceRadar
     [InitializeOnLoad]
     public static class ProjectOverlay
     {
-        private const int DefaultItemsPerFrame = 10;
 
         public static event Action CacheUpdated;
 
@@ -161,7 +160,7 @@ namespace Bro.ReferenceRadar
                 return;
             }
             var settings = Settings.Instance;
-            var itemsPerFrame = settings != null ? settings.ItemsPerFrame : DefaultItemsPerFrame;
+            var itemsPerFrame = settings != null ? settings.ItemsPerFrame : Settings.DefaultItemsPerFrame;
             var count = 0;
             while (_dirtyQueue.Count > 0 && count < itemsPerFrame)
             {

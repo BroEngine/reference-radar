@@ -192,8 +192,15 @@ namespace Bro.ReferenceRadar
         {
             var so = new SerializedObject(obj);
             var prop = so.GetIterator();
+            var iterations = 0;
             while (prop.Next(true))
             {
+                if (++iterations > Settings.MaxPropertyIterations)
+                {
+                    Debug.LogWarning($"[ReferenceRadar] property iteration limit reached for {obj.name} ({obj.GetType().Name}), skipping remaining properties");
+                    break;
+                }
+
                 if (prop.propertyType != SerializedPropertyType.ObjectReference)
                 {
                     continue;

@@ -12,6 +12,10 @@ namespace Bro.ReferenceRadar
 
     public class Settings : ScriptableObject
     {
+        public const int MaxPropertyIterations = 10000;
+        public const long BatchTimeMs = 100;
+        public const int DefaultItemsPerFrame = 10;
+
         private static Settings _instance;
         private static bool _isSearched;
 

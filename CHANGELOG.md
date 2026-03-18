@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2] - 2026-03-18
+
+### Fixed
+- Infinite loop in SerializedObject property traversal for assets with circular managed references ([SerializeReference])
+
+### Changed
+- Scan constants (MaxPropertyIterations, BatchTimeMs, DefaultItemsPerFrame) centralized in Settings
+
 ## [1.0.1] - 2026-03-16
 
 ### Fixed
