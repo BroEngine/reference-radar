@@ -58,6 +58,7 @@ namespace Bro.ReferenceRadar
 
             EditorApplication.hierarchyChanged -= InvalidateSceneMap;
             EditorApplication.hierarchyChanged += InvalidateSceneMap;
+            SyncSelection();
         }
 
         private void OnDisable()
@@ -97,7 +98,17 @@ namespace Bro.ReferenceRadar
             Repaint();
         }
 
+        private void OnFocus()
+        {
+            SyncSelection();
+        }
+
         private void OnSelectionChange()
+        {
+            SyncSelection();
+        }
+
+        private void SyncSelection()
         {
             _sceneResults.Clear();
             var activeGo = Selection.activeGameObject;

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.3] - 2026-07-21
+
+### Fixed
+- Window now refreshes when you open or switch to its tab, instead of staying empty in a background tab until you reselect.
+
 ## [1.0.2] - 2026-03-18
 
 ### Fixed
