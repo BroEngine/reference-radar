@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.4] - 2026-09-10
+
+### Fixed
+- Compiles on Unity 6000.6: the scene scanner no longer calls `Object.GetInstanceID()` (error-level obsolete there); de-duplication keys by the object reference instead, which behaves identically on 2021.3+
+
 ## [1.0.3] - 2026-07-21
 
 ### Fixed

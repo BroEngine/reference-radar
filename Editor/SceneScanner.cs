@@ -31,7 +31,7 @@ namespace Bro.ReferenceRadar
         public static List<SceneObjectRef> ScanGameObjectSceneRefs(GameObject go)
         {
             var results = new List<SceneObjectRef>();
-            var seen = new HashSet<int>();
+            var seen = new HashSet<GameObject>();
             var components = go.GetComponents<Component>();
             foreach (var component in components)
             {
@@ -65,7 +65,7 @@ namespace Bro.ReferenceRadar
                     {
                         continue;
                     }
-                    if (!seen.Add(refGo.GetInstanceID()))
+                    if (!seen.Add(refGo))
                     {
                         continue;
                     }
@@ -93,7 +93,7 @@ namespace Bro.ReferenceRadar
         private static void ScanHierarchy(GameObject root, Dictionary<string, List<SceneObjectRef>> map)
         {
             var components = root.GetComponentsInChildren<Component>(true);
-            var seen = new HashSet<(int goId, string assetPath)>();
+            var seen = new HashSet<(GameObject go, string assetPath)>();
             foreach (var component in components)
             {
                 if (component == null)
@@ -102,7 +102,6 @@ namespace Bro.ReferenceRadar
                 }
                 var componentName = component.GetType().Name;
                 var go = component.gameObject;
-                var goId = go.GetInstanceID();
                 var so = new SerializedObject(component);
                 var prop = so.GetIterator();
                 while (prop.Next(true))
@@ -121,7 +120,7 @@ namespace Bro.ReferenceRadar
                     {
                         continue;
                     }
-                    if (!seen.Add((goId, refPath)))
+                    if (!seen.Add((go, refPath)))
                     {
                         continue;
                     }
@@ -142,7 +141,7 @@ namespace Bro.ReferenceRadar
         public static List<SceneObjectRef> FindReferencesToObject(GameObject target)
         {
             var results = new List<SceneObjectRef>();
-            var seen = new HashSet<int>();
+            var seen = new HashSet<GameObject>();
             var roots = GetAllRootGameObjects();
             foreach (var root in roots)
             {
@@ -151,7 +150,7 @@ namespace Bro.ReferenceRadar
             return results;
         }
 
-        private static void FindRefsInHierarchy( GameObject root, GameObject target, HashSet<int> seen, List<SceneObjectRef> results)
+        private static void FindRefsInHierarchy( GameObject root, GameObject target, HashSet<GameObject> seen, List<SceneObjectRef> results)
         {
             var components = root.GetComponentsInChildren<Component>(true);
             foreach (var component in components)
@@ -189,7 +188,7 @@ namespace Bro.ReferenceRadar
                         break;
                     }
                 }
-                if (isFound && seen.Add(go.GetInstanceID()))
+                if (isFound && seen.Add(go))
                 {
                     results.Add(new SceneObjectRef
                     {
